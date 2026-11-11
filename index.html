@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini AI Chat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Mini AI Chat</h1>
+    </header>
+
+    <main>
+        <!-- API Key Section -->
+        <section id="api-settings">
+            <label for="api-key">OpenRouter API Key:</label>
+            <input type="password" id="api-key" placeholder="Enter your key...">
+            <button id="save-btn">Save</button>
+            <button id="forget-btn">Forget key</button>
+        </section>
+         <hr> <!-- Just a line to separate sections -->
+
+        <!-- Conversation Section -->
+        <section id="chat-history">
+            <!-- The AI and User messages will get injected here by JavaScript later -->
+        </section>
+
+        <!-- Status Indicator -->
+        <p id="status-text">Status: Ready</p>
+
+        <!-- Question Section -->
+        <section id="question-area">
+            <label for="user-question">Your question:</label><br>
+            <textarea id="user-question" rows="3" placeholder="Type a question..."></textarea>
+            <br>
+            <button id="send-btn">Send</button>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
