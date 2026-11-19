@@ -1,42 +1,164 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini AI Chat</title>
+    <title>Capri AI — Edgerunner Interface</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Mini AI Chat</h1>
-    </header>
+    <div class="app-layout">
+        <!-- Mobile Overlay -->
+        <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
-    <main>
-        <!-- API Key Section -->
-        <section id="api-settings">
-            <label for="api-key">OpenRouter API Key:</label>
-            <input type="password" id="api-key" placeholder="Enter your key...">
-            <button id="save-btn">Save</button>
-            <button id="forget-btn">Forget key</button>
-        </section>
-         <hr> <!-- Just a line to separate sections -->
+        <!-- LEFT SIDEBAR (Gemini Style) -->
+        <aside id="sidebar" class="sidebar" aria-label="Conversation History">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <div id="sidebar-logo-slot" class="capri-emblem">
+                        <!-- Custom Cyberpunk Capri Emblem (Crimson Red + Neon Green + Black) -->
+                        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <rect x="2" y="2" width="36" height="36" rx="10" fill="#07080B" stroke="#FF1E42" stroke-width="2"/>
+                            <!-- Cybernetic Capricorn Horns -->
+                            <path d="M9 12L15 8L18 14M31 12L25 8L22 14" stroke="#00FF66" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <!-- Core Visor / Sigil -->
+                            <path d="M12 18L20 14L28 18L24 28L20 31L16 28L12 18Z" fill="#FF1E42" fill-opacity="0.22" stroke="#FF1E42" stroke-width="2"/>
+                            <circle cx="20" cy="21" r="3" fill="#00FF66"/>
+                        </svg>
+                    </div>
+                    <span class="brand-title">Capri</span>
+                </div>
+                <button id="close-sidebar-btn" class="icon-btn mobile-only" type="button" aria-label="Close sidebar">✕</button>
+            </div>
 
-        <!-- Conversation Section -->
-        <section id="chat-history">
-            <!-- The AI and User messages will get injected here by JavaScript later -->
-        </section>
+            <button id="new-chat-btn" class="new-chat-sidebar-btn" type="button">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                <span>New chat</span>
+            </button>
 
-        <!-- Status Indicator -->
-        <p id="status-text">Status: Ready</p>
+            <div class="sidebar-section-header">
+                <span>Conversations</span>
+                <button id="restore-history-btn" class="mini-link-btn" type="button" title="Restore last saved session">Restore</button>
+            </div>
 
-        <!-- Question Section -->
-        <section id="question-area">
-            <label for="user-question">Your question:</label><br>
-            <textarea id="user-question" rows="3" placeholder="Type a question..."></textarea>
-            <br>
-            <button id="send-btn">Send</button>
-        </section>
-    </main>
+            <!-- Saved Conversations List -->
+            <div id="conversation-list" class="conversation-list" role="list">
+                <!-- Populated dynamically by script.js -->
+            </div>
+
+            <!-- Sidebar Bottom Profile & Settings Trigger -->
+            <div class="sidebar-footer">
+                <button id="open-settings-btn" class="sidebar-user-btn" type="button" title="Open API Key & Avatar Settings">
+                    <div id="footer-avatar-slot" class="user-avatar-badge">C</div>
+                    <div class="user-meta">
+                        <span class="user-name">Capri Config</span>
+                        <span id="sidebar-key-status" class="user-sub">API Key: Not set</span>
+                    </div>
+                    <svg class="gear-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN WORKSPACE -->
+        <div class="main-area">
+            <!-- Top Header -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button id="open-sidebar-btn" class="icon-btn" type="button" aria-label="Toggle sidebar" title="Toggle sidebar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                    <span class="topbar-title">Capri AI</span>
+                    <span class="model-pill">openrouter/free</span>
+                </div>
+
+                <div class="topbar-right">
+                    <!-- Quick API Key Status Trigger -->
+                    <button id="header-key-btn" class="key-pill-btn" type="button" title="Configure OpenRouter API Key">
+                        <span id="key-dot" class="key-dot missing"></span>
+                        <span id="header-key-label">API Key</span>
+                    </button>
+
+                    <!-- Light / Dark Theme Switch -->
+                    <button id="theme-toggle-btn" class="icon-btn" type="button" aria-label="Switch light or dark theme" title="Switch theme">
+                        <svg id="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <svg id="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Collapsible Settings Modal (API Key + Optional Custom Avatar) -->
+            <div id="settings-modal" class="modal-backdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
+                <div class="modal-card">
+                    <div class="modal-header">
+                        <h2 id="settings-modal-title">Capri Settings & API Key</h2>
+                        <button id="close-modal-btn" class="icon-btn" type="button" aria-label="Close settings">✕</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <label for="api-key" class="field-label">OpenRouter API Key</label>
+                        <p class="field-hint">Stored locally in your browser (`localStorage`). Never uploaded to GitHub.</p>
+                        <div class="modal-input-row">
+                            <input type="password" id="api-key" placeholder="sk-or-v1-...">
+                            <button id="save-btn" class="btn-cyber-primary" type="button">Save</button>
+                            <button id="forget-btn" class="btn-cyber-ghost" type="button">Forget key</button>
+                        </div>
+
+                        <hr class="modal-divider">
+
+                        <label for="avatar-upload" class="field-label">Custom Capri Avatar (Optional)</label>
+                        <p class="field-hint">Want to use a direct screenshot of Capri from Edgerunners? Select a PNG/JPG image here.</p>
+                        <div class="modal-input-row">
+                            <input type="file" id="avatar-upload" accept="image/png, image/jpeg, image/webp">
+                            <button id="reset-avatar-btn" class="btn-cyber-ghost" type="button">Reset Emblem</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Chat Stream -->
+            <main id="chat-history" class="chat-stream" aria-live="polite">
+                <!-- Welcome screen or rich formatted messages -->
+            </main>
+
+            <!-- Floating Bottom Composer -->
+            <footer class="composer-wrapper">
+                <div class="composer-container">
+                    <div class="composer-meta">
+                        <div class="status-pill">
+                            <span id="status-dot" class="status-dot"></span>
+                            <span id="status-text">Status: Ready</span>
+                        </div>
+                        <button id="clear-history-btn" class="link-danger-btn" type="button">Clear History</button>
+                    </div>
+
+                    <!-- Attached .txt file pill -->
+                    <div id="file-info" class="attachment-chip" style="display: none;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        <span id="file-name"></span>
+                        <button id="remove-file-btn" class="remove-chip-btn" type="button" aria-label="Remove attached file">✕</button>
+                    </div>
+
+                    <div class="prompt-capsule">
+                        <label for="file-input" class="attach-btn" title="Attach a .txt file (max 50KB)" tabindex="0">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                        </label>
+                        <input type="file" id="file-input" accept=".txt,text/plain" hidden>
+
+                        <textarea id="user-question" rows="1" placeholder="Ask Capri anything..."></textarea>
+
+                        <button id="send-btn" class="send-circle-btn" type="button" aria-label="Send message" title="Send">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        </button>
+                    </div>
+
+                    <p class="privacy-disclaimer">
+                        Prompts and uploaded .txt files are sent to OpenRouter. Use non-sensitive test data.
+                    </p>
+                </div>
+            </footer>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
