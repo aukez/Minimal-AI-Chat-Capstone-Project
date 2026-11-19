@@ -52,13 +52,7 @@ let attachedFile = null;
 let customAvatarDataUrl = null;
 
 // Default Cyberpunk Capri SVG (Crimson Red #FF1E42 + Neon Green #00FF66 + Obsidian #07080B)
-const DEFAULT_CAPRI_SVG = `
-<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <rect x="2" y="2" width="36" height="36" rx="10" fill="#07080B" stroke="#FF1E42" stroke-width="2"/>
-    <path d="M9 12L15 8L18 14M31 12L25 8L22 14" stroke="#00FF66" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M12 18L20 14L28 18L24 28L20 31L16 28L12 18Z" fill="#FF1E42" fill-opacity="0.22" stroke="#FF1E42" stroke-width="2"/>
-    <circle cx="20" cy="21" r="3" fill="#00FF66"/>
-</svg>`;
+const DEFAULT_CAPRI_SVG = `<img src="capri-logo.jpg" alt="Capri Avatar">`;
 
 function getCapriAvatarHTML() {
     if (customAvatarDataUrl) {
@@ -69,13 +63,8 @@ function getCapriAvatarHTML() {
 
 function updateAvatarDisplays() {
     sidebarLogoSlot.innerHTML = getCapriAvatarHTML();
-    if (customAvatarDataUrl) {
-        footerAvatarSlot.innerHTML = `<img src="${customAvatarDataUrl}" alt="Capri">`;
-    } else {
-        footerAvatarSlot.textContent = 'C';
-    }
+    footerAvatarSlot.innerHTML = getCapriAvatarHTML();
 }
-
 // ================= SAFE MARKDOWN FORMATTER (Fixes raw **text**) =================
 function escapeHtml(str) {
     return str
